@@ -24,16 +24,19 @@ public class ActionPatientJoinTest {
 
     @Test
     void testPatientActionsJoinAndOrder() {
-        // choose unique ids for patient and actions to avoid collisions with existing DB data
+        // advance DB sequences to avoid key collisions with existing data
         Number maxPatientIdN = (Number) em.createQuery("SELECT COALESCE(MAX(p.id), 0) FROM Patient p").getSingleResult();
-        long nextPatientId = maxPatientIdN.longValue() + 1L;
+        em.createNativeQuery("SELECT setval('patient_entity_id_seq', :val)")
+                .setParameter("val", maxPatientIdN.longValue())
+                .getSingleResult();
 
         Number maxActionIdN = (Number) em.createQuery("SELECT COALESCE(MAX(a.id), 0) FROM Action a").getSingleResult();
-        long nextActionId = maxActionIdN.longValue() + 1L;
+        em.createNativeQuery("SELECT setval('action_entity_id_seq', :val)")
+                .setParameter("val", maxActionIdN.longValue())
+                .getSingleResult();
 
-        // create patient with a unique entity id
+        // create patient
         Patient p = new Patient();
-        p.setId(nextPatientId);
         p.setEntityCreated(Instant.now());
         p.setEntityUpdated(Instant.now());
         p.setEntityVersion(0L);
@@ -45,7 +48,6 @@ public class ActionPatientJoinTest {
 
         // create two actions referencing the patient
         Action a1 = new Action();
-        a1.setId(nextActionId);
         a1.setEntityCreated(Instant.now());
         a1.setEntityUpdated(Instant.now());
         a1.setEntityVersion(0L);
@@ -58,7 +60,6 @@ public class ActionPatientJoinTest {
         em.persist(a1);
 
         Action a2 = new Action();
-        a2.setId(nextActionId + 1L);
         a2.setEntityCreated(Instant.now());
         a2.setEntityUpdated(Instant.now());
         a2.setEntityVersion(0L);
