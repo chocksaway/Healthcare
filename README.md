@@ -310,7 +310,7 @@ Manual testing of the application can be done by opening a browser and navigatin
 
 ![img_3.png](img_3.png)
 
-**List** of patients - page one - ten to a page:
+**List** of patients - page two - ten to a page:
 
 ![img_4.png](img_4.png)
 
