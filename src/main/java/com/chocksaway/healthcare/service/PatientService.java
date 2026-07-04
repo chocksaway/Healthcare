@@ -27,6 +27,15 @@ public class PatientService {
         this.mapper = mapper;
     }
 
+    public List<PatientDTO> search(String q) {
+        if (q == null || q.trim().isEmpty()) {
+            return listAll();
+        }
+        return patientRepository.searchByQuery(q).stream()
+                .map(p -> mapper.map(p, PatientDTO.class))
+                .collect(Collectors.toList());
+    }
+
     public List<PatientDTO> listAll() {
         return patientRepository.findAll().stream()
                 .map(p -> mapper.map(p, PatientDTO.class))
@@ -55,11 +64,4 @@ public class PatientService {
     public long countInvited(){ return patientRepository.countInvited(); }
     public long countRegistered(){ return patientRepository.countRegistered(); }
     public long countDischarged(){ return patientRepository.countDischarged(); }
-
-    public List<PatientDTO> search(String q) {
-        if (q == null || q.trim().isEmpty()) return listAll();
-        return patientRepository.searchByQuery(q).stream()
-                .map(p -> mapper.map(p, PatientDTO.class))
-                .collect(Collectors.toList());
-    }
 }
