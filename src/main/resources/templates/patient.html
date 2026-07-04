@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+  <h1 th:text="${patient.givenName + ' ' + patient.familyName}"></h1>
+  <span th:if="${patient.gender == null or #strings.isEmpty(patient.gender)}" class="missing-badge" role="status" aria-live="polite">Gender not recorded</span>
+  <h2>Actions</h2>
+  <table border="1">
+    <tr><th>When</th><th>Activity</th><th>Context</th><th>Module</th></tr>
+    <tr th:each="a : ${actions}">
+      <td th:text="${a.whenRecorded}"></td>
+      <td th:text="${a.activity}"></td>
+      <td th:text="${a.context}"></td>
+      <td th:text="${a.moduleId}"></td>
+    </tr>
+  </table>
+  <p><a th:href="@{/patients}">Back</a></p>
+</body>
+</html>

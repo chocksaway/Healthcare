@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Living - Dashboard</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Patient breakdown</h1>
+  <canvas id="breakdown" width="400" height="200"></canvas>
+  <script th:inline="javascript">
+    const invited = [[${invited}]];
+    const registered = [[${registered}]];
+    const discharged = [[${discharged}]];
+    const ctx = document.getElementById('breakdown').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Invited','Registered','Discharged'],
+        datasets: [{
+          label: 'Patients',
+          backgroundColor: ['#36a2eb','#4bc0c0','#ff6384'],
+          data: [invited, registered, discharged]
+        }]
+      }
+    });
+  </script>
+  <p><a th:href="@{/patients}">View patients</a></p>
+</body>
+</html>

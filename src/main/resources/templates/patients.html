@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Patients</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  <style>
+    #search { margin-bottom: 10px; padding: 6px; width: 300px; }
+  </style>
+</head>
+<body>
+  <h1>Patients</h1>
+
+  <!-- Search box + inline results (independent of paged list below) -->
+  <div id="search-area">
+    <label for="search">Search patients:</label>
+    <input id="search" type="text" placeholder="Search patients..." />
+    <div id="search-results" style="margin-top:10px; display:none;">
+      <strong>Search results</strong>
+      <table border="1" style="margin-top:6px; width:100%;">
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Gender</th></tr>
+        </thead>
+        <tbody id="search-results-body">
+          <!-- populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Main paged list (10 per page) -->
+  <table border="1">
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Gender</th></tr>
+    </thead>
+    <tbody id="patients-body">
+    <tr th:each="p : ${patientsPage.content}" th:classappend="${p.gender == null or #strings.isEmpty(p.gender)} ? ' no-gender' : ''">
+      <td th:text="${p.id}"></td>
+      <td><a th:href="@{/patients/{id}(id=${p.id})}" th:text="${p.givenName + ' ' + p.familyName}"></a></td>
+      <td th:text="${p.gender}"></td>
+    </tr>
+    </tbody>
+  </table>
+  <div th:if="${patientsPage.totalPages > 1}">
+    <nav>
+      <ul style="list-style:none;padding:0;display:flex;gap:8px;">
+        <!-- previous: use 1-based page value (patientsPage.number is 0-based) -->
+        <li th:if="${!patientsPage.first}"><a th:href="@{/patients(page=${patientsPage.number})}">&laquo; Prev</a></li>
+        <!-- numbered links: produce 1..totalPages -->
+        <li th:each="i : ${#numbers.sequence(1, patientsPage.totalPages)}">
+          <a th:href="@{/patients(page=${i})}"
+             th:text="${i}"
+             th:classappend="${i == patientsPage.number + 1} ? ' current' : ''"
+             style="padding:4px 8px;text-decoration:none;border:1px solid #ccc;"></a>
+        </li>
+        <!-- next: patientsPage.number is 0-based, so +2 for next 1-based page -->
+        <li th:if="${!patientsPage.last}"><a th:href="@{/patients(page=${patientsPage.number + 2})}">Next &raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+  <p><a th:href="@{/}">Back</a></p>
+
+  <script>
+    const input = document.getElementById('search');
+    const patientsTbody = document.getElementById('patients-body');
+    const resultsDiv = document.getElementById('search-results');
+    const resultsBody = document.getElementById('search-results-body');
+    let timeout = null;
+
+    input.addEventListener('input', function() {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        const q = input.value || '';
+        if (!q.trim()) {
+          // hide results and leave paged list untouched
+          resultsDiv.style.display = 'none';
+          resultsBody.innerHTML = '';
+          return;
+        }
+
+        fetch('/api/patients/search?q=' + encodeURIComponent(q))
+          .then(r => r.json())
+          .then(data => {
+            resultsBody.innerHTML = '';
+            if (!data || data.length === 0) {
+              resultsBody.innerHTML = '<tr><td colspan="3">No matches</td></tr>';
+            } else {
+              data.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${p.id}</td><td><a href="/patients/${p.id}">${(p.givenName||'') + ' ' + (p.familyName||'')}</a></td><td>${p.gender||''}</td>`;
+                // mark rows with missing/empty gender
+                if (!p.gender || String(p.gender).trim() === '') {
+                  tr.classList.add('no-gender');
+                }
+                resultsBody.appendChild(tr);
+              });
+            }
+            // show results area
+            resultsDiv.style.display = '';
+          })
+          .catch(err => {
+            console.error('Search error', err);
+            resultsDiv.style.display = 'none';
+            resultsBody.innerHTML = '';
+          });
+      }, 250);
+    });
+  </script>
+</body>
+</html>
