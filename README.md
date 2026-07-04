@@ -314,7 +314,7 @@ Manual testing of the application can be done by opening a browser and navigatin
 
 ![img_4.png](img_4.png)
 
-Marcus O'Reilly Actions
+Click Marcus O'Reilly (on page one) and view Actions:
 
 ![img_2.png](img_2.png)
 
