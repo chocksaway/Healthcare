@@ -1,0 +1,74 @@
+/* Global styles for the Healthcare app */
+:root{
+  --bg:#f7f9fb;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --accent:#2563eb;
+  --border:#e5e7eb;
+  --radius:6px;
+}
+html,body{height:100%;}
+body{
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:var(--bg);
+  color:#0f172a;
+  margin:0;
+  padding:24px 12px;
+}
+.container{
+  max-width:980px;
+  margin:0 auto;
+  background:transparent;
+}
+h1{font-size:1.6rem;margin:0 0 12px;}
+h2{font-size:1.1rem;margin:16px 0 8px;color:var(--muted)}
+/* Tables */
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--radius);overflow:hidden}
+table thead tr{background:linear-gradient(180deg,#fbfdff,#f8fbff);}
+table th, table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);}
+table tr:hover td{background:#fbfcff}
+table th{font-weight:600;color:#111827}
+
+/* Search area */
+#search-area{margin-bottom:12px;display:flex;flex-direction:column;gap:8px}
+input[type="text"]#search{padding:8px 10px;border:1px solid var(--border);border-radius:6px;width:320px}
+
+#search-results{background:var(--card);padding:10px;border-radius:6px;border:1px solid var(--border);}
+
+/* Pagination */
+nav ul{list-style:none;padding:0;margin:12px 0;display:flex;gap:8px;align-items:center}
+nav a{display:inline-block;padding:6px 10px;border-radius:6px;border:1px solid var(--border);text-decoration:none;color:var(--accent)}
+nav a.current, nav a.current:link{background:var(--accent);color:#fff;border-color:var(--accent)}
+nav a:hover{background:#eef6ff}
+
+/* Links & buttons */
+a{color:var(--accent)}
+p a{color:var(--accent)}
+
+/* Small responsive tweaks */
+@media (max-width:640px){
+  .container{padding:0 8px}
+  input[type="text"]#search{width:100%}
+  table th, table td{padding:8px}
+}
+
+/* Highlight rows where gender is missing */
+.no-gender td{
+  background: #fff1f2; /* pale red */
+  outline: 2px solid #ef4444; /* red outline */
+  outline-offset: -2px;
+}
+
+/* Badge for missing gender on detail page */
+.missing-badge{
+  display:inline-block;
+  margin:8px 0 0 8px;
+  padding:4px 8px;
+  background:#fff1f2;
+  color:#7f1d1d;
+  border:1px solid #ef4444;
+  border-radius:6px;
+  font-size:0.9rem;
+}
+
+
