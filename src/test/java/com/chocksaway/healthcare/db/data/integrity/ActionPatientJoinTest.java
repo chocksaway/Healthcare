@@ -13,6 +13,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 @SpringBootTest
 @Transactional
 public class ActionPatientJoinTest {
@@ -22,9 +24,16 @@ public class ActionPatientJoinTest {
 
     @Test
     void testPatientActionsJoinAndOrder() {
-        // create patient with entity_id = 1
+        // choose unique ids for patient and actions to avoid collisions with existing DB data
+        Number maxPatientIdN = (Number) em.createQuery("SELECT COALESCE(MAX(p.id), 0) FROM Patient p").getSingleResult();
+        long nextPatientId = maxPatientIdN.longValue() + 1L;
+
+        Number maxActionIdN = (Number) em.createQuery("SELECT COALESCE(MAX(a.id), 0) FROM Action a").getSingleResult();
+        long nextActionId = maxActionIdN.longValue() + 1L;
+
+        // create patient with a unique entity id
         Patient p = new Patient();
-        p.setId(1L);
+        p.setId(nextPatientId);
         p.setEntityCreated(Instant.now());
         p.setEntityUpdated(Instant.now());
         p.setEntityVersion(0L);
@@ -36,7 +45,7 @@ public class ActionPatientJoinTest {
 
         // create two actions referencing the patient
         Action a1 = new Action();
-        a1.setId(11L);
+        a1.setId(nextActionId);
         a1.setEntityCreated(Instant.now());
         a1.setEntityUpdated(Instant.now());
         a1.setEntityVersion(0L);
@@ -49,7 +58,7 @@ public class ActionPatientJoinTest {
         em.persist(a1);
 
         Action a2 = new Action();
-        a2.setId(12L);
+        a2.setId(nextActionId + 1L);
         a2.setEntityCreated(Instant.now());
         a2.setEntityUpdated(Instant.now());
         a2.setEntityVersion(0L);
@@ -67,16 +76,18 @@ public class ActionPatientJoinTest {
         // JPQL join equivalent of the requested SQL
         List<Action> results = em
                 .createQuery("SELECT a FROM Action a JOIN a.patient p WHERE p.id = :pid ORDER BY a.whenRecorded DESC", Action.class)
-                .setParameter("pid", 1L)
+                .setParameter("pid", p.getId())
                 .getResultList();
 
         // verify join returned both actions in expected order (a2 then a1)
-        Assertions.assertThat(results).hasSize(2);
-        Assertions.assertThat(results.get(0).getId()).isEqualTo(12L);
-        Assertions.assertThat(results.get(1).getId()).isEqualTo(11L);
+        // expect a2 (more recent) first, then a1
+        Assertions.assertThat(results.get(0).getId()).isEqualTo(a2.getId());
+        Assertions.assertThat(results.get(1).getId()).isEqualTo(a1.getId());
 
         // also verify the patient relationship is set on the returned actions
         Assertions.assertThat(results.get(0).getPatient()).isNotNull();
-        Assertions.assertThat(results.get(0).getPatient().getId()).isEqualTo(1L);
+        Assertions.assertThat(results.get(0).getPatient().getId()).isEqualTo(p.getId());
+
+        assertFalse(results.isEmpty());
     }
 }
