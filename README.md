@@ -6,8 +6,23 @@ Once you have *cloned* the repository, you must get the *.sql files for creating
 
 From the *Healthcare* project root directory, run the following commands:
 
+----
+
+**Please note** that the problems with removing the data directory and stopping the docker container were that I was using snap to manage docker.
+This has been fixed by removing the snap version of docker, and using **apt install**.
+
+You should be able to use install, and remove PostgreSQL (without using sudo):
+```
+   docker-compose -f docker-compose.yml up -d db
+   docker-compose -f docker-compose.yml logs -f db
+   docker-compose down
+```
+
+----
+
 **To** wipe the database.  I have had to use sudo commands to remove the data directory and stop the docker container.  
 I have not been able to do this as a non-root user:
+
 
 Check the docker container;  Remove the data directory; stop the container; check the container is no longer running:
 ```
@@ -34,7 +49,7 @@ Check the docker-compose version:
 $ docker-compose --version
 Docker Compose version v2.29.2
 ```
-Installing PostgreSQL database and client, load data:
+Installing PostgreSQL database and client, load data (**sudo not needed**)
 
 ```
 $ sudo docker-compose -f docker-compose.yml up -d db
