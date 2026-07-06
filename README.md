@@ -318,6 +318,18 @@ Click Marcus O'Reilly (on page one) and view Actions:
 
 ![img_2.png](img_2.png)
 
+### Alternative design and development approaches 
+
+The implementation makes use of a Spring Boot application, with a Thymeleaf template front-end.  This serves all web pages.
+
+An alternative approach would be to use a REST API with a front-end framework such as React / TypeScript.  This would allow for a more dynamic and responsive user interface (with greater control of CSS, look and feel).
+
+The advantage would be that the front-end would not be tightly coupled to the back-end, and could be replaced, developed, or deployed independently of the back-end.  The front-end could be scaled (AWS auto-scale groups) differently to the back-end. 
+
+Disadvantages of having a separate back-end and front-end would be that it would require more development effort, and a greater understanding of front-end frameworks, with more complex build and deployment process.  
+
+![img_5.png](img_5.png)
+
 #end
 
 
