@@ -4,6 +4,8 @@ Please read the [Development Log](DEV-LOG.md) for more detail on development ste
 
 Once you have *cloned* the repository, you must get the *.sql files for creating the database, loading the data, and configuring constraints.
 
+From the *Healthcare* project root directory, run the following commands:
+
 **To** wipe the database.  I have had to use sudo commands to remove the data directory and stop the docker container.  
 I have not been able to do this as a non-root user:
 
