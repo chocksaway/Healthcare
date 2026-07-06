@@ -52,14 +52,14 @@ Docker Compose version v2.29.2
 Installing PostgreSQL database and client, load data (**sudo not needed**)
 
 ```
-$ sudo docker-compose -f docker-compose.yml up -d db
+$ docker-compose -f docker-compose.yml up -d db
 [+] Running 2/2
  ✔ Network healthcare_default  Created                                                                                                                                                                                                                                                                 0.2s 
  ✔ Container healthcare-db-1   Started    
 ```
 Examine the docker logs (summary) - seeing 3201 and 101 shows the data has been imported:
 ```
-$ sudo docker-compose -f docker-compose.yml logs -f db
+$ docker-compose -f docker-compose.yml logs -f db
  
  waiting for server to start....2026-07-04 17:12:32.325 UTC [49] LOG:  starting PostgreSQL 15.18 (Debian 15.18-1.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
  [snip]
