@@ -1,10 +1,12 @@
 package com.chocksaway.healthcare.dto;
 
+import jakarta.validation.Valid;
 import java.time.Instant;
 import java.util.UUID;
 
 public class ActionDTO {
     private Long id;
+    @Valid
     private PatientDTO patient;
     private Instant whenRecorded;
     private UUID externalId;

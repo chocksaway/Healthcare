@@ -1,9 +1,14 @@
 package com.chocksaway.healthcare.dto;
 
 import com.chocksaway.healthcare.domain.Patient;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import java.util.Set;
 
 import java.time.Instant;
 
@@ -46,17 +51,47 @@ public class PatientDTOTest {
         assertEquals(patient.getGender(), patientDTO.getGender());
     }
 
+    // --- Bean Validation tests ---
+
+    private static Validator validator;
+
+    @BeforeAll
+    public static void setUpValidator() {
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
+    }
+
     @Test
-    public void testInvalidPatientDTOMapping() {
-        // create patient
-        Patient patient = new Patient();
+    public void validPatient_noViolations() {
+        PatientDTO p = new PatientDTO();
+        p.setId(1L);
+        p.setGivenName("Alice");
+        p.setFamilyName("Jones");
 
-        // map patient to patientDTO and verify only selected fields are present
-        PatientDTO patientDTO = this.mapper.map(patient, PatientDTO.class);
+        Set<ConstraintViolation<PatientDTO>> violations = validator.validate(p);
+        assertTrue(violations.isEmpty());
+    }
 
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                patientDTO::validate
-        );
+    @Test
+    public void missingId_hasNotNullViolation() {
+        PatientDTO p = new PatientDTO();
+        p.setGivenName("Alice");
+        p.setFamilyName("Jones");
+
+        Set<ConstraintViolation<PatientDTO>> violations = validator.validate(p);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> "id".equals(v.getPropertyPath().toString())));
+    }
+
+    @Test
+    public void blankNames_haveNotBlankViolations() {
+        PatientDTO p = new PatientDTO();
+        p.setId(2L);
+        p.setGivenName("");
+        p.setFamilyName(" ");
+
+        Set<ConstraintViolation<PatientDTO>> violations = validator.validate(p);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> "givenName".equals(v.getPropertyPath().toString())));
+        assertTrue(violations.stream().anyMatch(v -> "familyName".equals(v.getPropertyPath().toString())));
     }
 }

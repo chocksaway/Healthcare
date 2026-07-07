@@ -1,9 +1,18 @@
 package com.chocksaway.healthcare.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class PatientDTO {
+    @NotNull
     private Long id;
+    @NotBlank
     private String givenName;
+    @NotBlank
     private String familyName;
+
+    // I'm not applying @NotBlank because of constraint on the database column, which allows null values
+    // Please refer to DEV-LOG.md
     private String gender;
 
     public PatientDTO() {}
@@ -20,15 +29,4 @@ public class PatientDTO {
     public String getGender() { return gender; }
     public void setGender(String gender) { this.gender = gender; }
 
-    public void validate() throws IllegalArgumentException {
-        if (id == null) {
-            throw new IllegalArgumentException("PatientDTO id cannot be null");
-        }
-        if (givenName == null || givenName.isEmpty()) {
-            throw new IllegalArgumentException("PatientDTO givenName cannot be null or empty");
-        }
-        if (familyName == null || familyName.isEmpty()) {
-            throw new IllegalArgumentException("PatientDTO familyName cannot be null or empty");
-        }
-    }
 }
