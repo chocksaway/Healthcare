@@ -198,13 +198,19 @@ public class Patient {
     }
 
     public void addAction(Action action) {
-        actions.add(action);
-        action.setPatient(this);
+        if (action == null) throw new IllegalArgumentException("action cannot be null");
+        if (actions == null) actions = new ArrayList<>();
+        if (!actions.contains(action)) {
+            actions.add(action);
+            action.setPatient(this);
+        }
     }
 
     public void removeAction(Action action) {
-        actions.remove(action);
-        action.setPatient(null);
+        if (action == null) return;
+        if (actions != null && actions.remove(action)) {
+            action.setPatient(null);
+        }
     }
 
 }

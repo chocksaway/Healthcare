@@ -69,8 +69,9 @@ class PatientServiceSpringTest {
         var page = patientService.listPage(0,10);
         assertThat(page.getTotalElements()).isEqualTo(1);
 
-        PatientDTO dto = patientService.getPatient(42L);
-        assertThat(dto).isNotNull();
+        Optional<PatientDTO> dtoOpt = patientService.getPatient(42L);
+        assertThat(dtoOpt).isPresent();
+        PatientDTO dto = dtoOpt.get();
         assertThat(dto.getGivenName()).isEqualTo("Alice");
     }
 

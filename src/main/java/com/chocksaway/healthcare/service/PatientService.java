@@ -1,7 +1,6 @@
 package com.chocksaway.healthcare.service;
 
 import com.chocksaway.healthcare.domain.Action;
-import com.chocksaway.healthcare.domain.Patient;
 import com.chocksaway.healthcare.dto.ActionDTO;
 import com.chocksaway.healthcare.dto.PatientDTO;
 import com.chocksaway.healthcare.repository.ActionRepository;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -48,10 +48,9 @@ public class PatientService {
                 .map(p -> mapper.map(p, PatientDTO.class));
     }
 
-    public PatientDTO getPatient(Long entityId) {
-        Patient p = patientRepository.findById(entityId).orElse(null);
-        if (p == null) return null;
-        return mapper.map(p, PatientDTO.class);
+    public Optional<PatientDTO> getPatient(Long entityId) {
+        return patientRepository.findById(entityId)
+                .map(p -> mapper.map(p, PatientDTO.class));
     }
 
     public List<ActionDTO> getActionsForPatient(Long entityId) {

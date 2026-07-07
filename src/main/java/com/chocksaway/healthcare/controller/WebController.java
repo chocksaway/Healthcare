@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class WebController {
@@ -42,8 +43,9 @@ public class WebController {
 
     @GetMapping("/patients/{id}")
     public String patient(@PathVariable Long id, Model model){
-        PatientDTO p = patientService.getPatient(id);
-        if (p == null) return "redirect:/patients";
+        Optional<PatientDTO> pOpt = patientService.getPatient(id);
+        if (pOpt.isEmpty()) return "redirect:/patients";
+        PatientDTO p = pOpt.get();
         model.addAttribute("patient", p);
         List<ActionDTO> actions = patientService.getActionsForPatient(id);
         model.addAttribute("actions", actions);

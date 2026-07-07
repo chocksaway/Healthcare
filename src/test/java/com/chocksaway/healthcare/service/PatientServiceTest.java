@@ -77,19 +77,19 @@ class PatientServiceTest {
     }
 
     @Test
-    void getPatient_returnsMappedDTO_orNull() {
+    void getPatient_returnsMappedDTO_orEmpty() {
         Patient p = new Patient(); p.setId(12L);
         PatientDTO dto = new PatientDTO(); dto.setId(12L);
 
         when(patientRepository.findById(12L)).thenReturn(Optional.of(p));
         when(mapper.map(p, PatientDTO.class)).thenReturn(dto);
 
-        PatientDTO res = service.getPatient(12L);
-        assertNotNull(res);
-        assertEquals(12L, res.getId());
+        Optional<PatientDTO> res = service.getPatient(12L);
+        assertTrue(res.isPresent());
+        assertEquals(12L, res.get().getId());
 
         when(patientRepository.findById(99L)).thenReturn(Optional.empty());
-        assertNull(service.getPatient(99L));
+        assertTrue(service.getPatient(99L).isEmpty());
     }
 
     @Test
