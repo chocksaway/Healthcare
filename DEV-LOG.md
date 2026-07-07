@@ -78,6 +78,21 @@ Create repository layer for Patient and Action entities
 + + countDischarged - count
 + + searchByQuery - search givenName, familyName, NHS number, hospital ID.
 
+----
+
+###  Please note: 
+
+For searchByQuery - I have escaped backslashes and underscores in the SQL dump to prevent SQL injection.
+Spring Data JPA binds parameters to prepared statements which prevents SQL injection; 
+
+I am aware that the searchByQuery does a SQL LIKE query, which is not the most efficient way to search (columns) data.
+In a production system, I would make sure that all columns being searched were indexed, or would consider using a full-text search engine such as Elasticsearch or SOLR.
+
+The ADD Constraint / Unique or Primary key implicitly creates an index on the column.  I would prefer to create an index explicitly (or comment).
+
+----
+
+
 Create unit tests for service layer
 + PatientServiceSpringTest and PatientServiceTest - uses Mockito to test PatientService, PatientRepository, and ActionRepository
 
