@@ -38,13 +38,23 @@ public class PatientService {
             if (q == null || q.trim().isEmpty()) {
                 return listAll();
             }
-            return patientRepository.searchByQuery(q).stream()
+
+            final String likeParam = sanitize(q);
+            return patientRepository.searchByQuery(likeParam).stream()
                     .map(p -> mapper.map(p, PatientDTO.class))
                     .collect(Collectors.toList());
         } catch (Exception ex) {
             log.error("Failed to search patients for q={}", q, ex);
             throw new ServiceException("Failed to search patients", ex);
         }
+    }
+
+    private String sanitize(final String q) {
+        // sanitize and escape wildcard characters to avoid unexpected LIKE behavior
+        String normalized = q.toLowerCase();
+        // escape backslash first, then % and _
+        normalized = normalized.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
+        return "%" + normalized + "%";
     }
 
     public List<PatientDTO> listAll() {

@@ -28,7 +28,9 @@ class PatientServiceExceptionTest {
 
     @Test
     void search_throwsServiceExceptionOnRepoError() {
-        when(patientRepository.searchByQuery("q")).thenThrow(new RuntimeException("Error in search"));
+        // service.search() sanitises the query (adds % and lowercases) before calling
+        // the repository, so mock using anyString() to match the actual call.
+        when(patientRepository.searchByQuery(anyString())).thenThrow(new RuntimeException("Error in search"));
         assertThrows(ServiceException.class, () -> service.search("q"));
     }
 

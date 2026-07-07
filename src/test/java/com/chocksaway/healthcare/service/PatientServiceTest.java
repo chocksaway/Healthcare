@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -137,12 +138,35 @@ class PatientServiceTest {
     void search_nonEmpty_usesRepositorySearch() {
         Patient p = new Patient(); p.setId(2L);
         PatientDTO dto = new PatientDTO(); dto.setId(2L);
-        when(patientRepository.searchByQuery("Bob")).thenReturn(List.of(p));
+        when(patientRepository.searchByQuery(anyString())).thenReturn(List.of(p));
         when(mapper.map(p, PatientDTO.class)).thenReturn(dto);
 
         List<PatientDTO> r = service.search("Bob");
         assertEquals(1, r.size());
         assertEquals(2L, r.getFirst().getId());
+    }
+
+    @Test
+    void search_escapesWildcardsAndBackslash() {
+        // ensure user wildcards and backslashes are escaped before passing to repository
+        when(patientRepository.searchByQuery(anyString())).thenReturn(List.of());
+
+        String input = "100%_\\Foo"; // contains %, _, and backslash
+        service.search(input);
+
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        verify(patientRepository).searchByQuery(captor.capture());
+        String passed = captor.getValue();
+
+        // wrapped with % on both sides
+        assertTrue(passed.startsWith("%"));
+        assertTrue(passed.endsWith("%"));
+        // lowercased input present
+        assertTrue(passed.toLowerCase().contains("100"));
+        // contains escaped percent, underscore and backslash sequences
+        assertTrue(passed.contains("\\%"));
+        assertTrue(passed.contains("\\_"));
+        assertTrue(passed.contains("\\\\"));
     }
 }
 

@@ -18,6 +18,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("SELECT count(p) FROM Patient p WHERE p.whenDischarged IS NOT NULL")
     long countDischarged();
 
-    @Query("SELECT p FROM Patient p WHERE lower(p.givenName) LIKE lower(concat('%',:q,'%')) OR lower(p.familyName) LIKE lower(concat('%',:q,'%')) OR lower(p.nhsNumber) LIKE lower(concat('%',:q,'%')) OR lower(p.hospitalId) LIKE lower(concat('%',:q,'%'))")
+    @Query("SELECT p FROM Patient p WHERE lower(p.givenName) LIKE :q ESCAPE '\\' OR lower(p.familyName) LIKE :q ESCAPE '\\' OR lower(p.nhsNumber) LIKE :q ESCAPE '\\' OR lower(p.hospitalId) LIKE :q ESCAPE '\\'")
     List<Patient> searchByQuery(@Param("q") String q);
 }
