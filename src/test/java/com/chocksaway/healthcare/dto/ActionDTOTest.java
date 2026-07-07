@@ -35,7 +35,7 @@ public class ActionDTOTest {
 
         Instant now = Instant.now();
         action.setWhenRecorded(now);
-        action.setId1(UUID.randomUUID());
+        action.setExternalId(UUID.randomUUID());
         action.setActivity("ACTIVITY");
         action.setContext("CTX");
         action.setModuleId("MOD1");

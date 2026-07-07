@@ -7,7 +7,7 @@ public class ActionDTO {
     private Long id;
     private PatientDTO patient;
     private Instant whenRecorded;
-    private UUID id1;
+    private UUID externalId;
     private String activity;
     private String context;
     private String moduleId;
@@ -23,8 +23,8 @@ public class ActionDTO {
     public Instant getWhenRecorded() { return whenRecorded; }
     public void setWhenRecorded(Instant whenRecorded) { this.whenRecorded = whenRecorded; }
 
-    public UUID getId1() { return id1; }
-    public void setId1(UUID id1) { this.id1 = id1; }
+    public UUID getExternalId() { return externalId; }
+    public void setExternalId(UUID externalId) { this.externalId = externalId; }
 
     public String getActivity() { return activity; }
     public void setActivity(String activity) { this.activity = activity; }

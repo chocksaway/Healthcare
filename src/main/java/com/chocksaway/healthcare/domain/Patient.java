@@ -46,7 +46,7 @@ public class Patient {
     private Instant whenRegistered;
 
     @Column(name = "id", nullable = false)
-    private UUID id1;
+    private UUID externalId;
 
     @Column(name = "family_name", nullable = false)
     private String familyName;
@@ -133,12 +133,12 @@ public class Patient {
         this.whenRegistered = whenRegistered;
     }
 
-    public UUID getId1() {
-        return id1;
+    public UUID getExternalId() {
+        return externalId;
     }
 
-    public void setId1(UUID id1) {
-        this.id1 = id1;
+    public void setExternalId(UUID externalId) {
+        this.externalId = externalId;
     }
 
     public String getFamilyName() {

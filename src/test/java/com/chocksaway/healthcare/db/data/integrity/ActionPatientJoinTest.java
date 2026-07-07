@@ -43,7 +43,7 @@ public class ActionPatientJoinTest {
         p.setWhenInvited(Instant.now());
         p.setGivenName("John");
         p.setFamilyName("Doe");
-        p.setId1(UUID.randomUUID());
+        p.setExternalId(UUID.randomUUID());
         em.persist(p);
 
         // create two actions referencing the patient
@@ -52,7 +52,7 @@ public class ActionPatientJoinTest {
         a1.setEntityUpdated(Instant.now());
         a1.setEntityVersion(0L);
         a1.setWhenRecorded(Instant.now().minusSeconds(60));
-        a1.setId1(UUID.randomUUID());
+        a1.setExternalId(UUID.randomUUID());
         a1.setActivity("TASK-COMPLETED");
         a1.setContext("FATIGUE");
         a1.setModuleId("PROGRAMME");
@@ -64,7 +64,7 @@ public class ActionPatientJoinTest {
         a2.setEntityUpdated(Instant.now());
         a2.setEntityVersion(0L);
         a2.setWhenRecorded(Instant.now());
-        a2.setId1(UUID.randomUUID());
+        a2.setExternalId(UUID.randomUUID());
         a2.setActivity("STARTED");
         a2.setContext("FATIGUE");
         a2.setModuleId("PROGRAMME");
