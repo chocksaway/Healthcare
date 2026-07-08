@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Controller
 public class WebController {
@@ -55,6 +58,9 @@ public class WebController {
     @GetMapping("/api/patients/search")
     @ResponseBody
     public List<PatientDTO> search(@RequestParam(name = "q", required = false) String q) {
+        if (q != null && q.length() > 256) {
+            throw new ResponseStatusException(BAD_REQUEST, "q length > 256");
+        }
         return patientService.search(q);
     }
 }
