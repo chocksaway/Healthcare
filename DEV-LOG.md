@@ -3,6 +3,8 @@ Development Log - Miles Davenport
 Install PostgreSQL database and client, load data.
  + I experimented with installing PostgreSQL locally, but decided to use docker-compose.
  + + There is a docker-compose.yml file, which is in the root of the project:
+ + + + The PostgreSQL database credentials are hardcoded for development and testing purposed.  In a production environment these would be stored as environment variables or in a secure keystore.
+ + + + The volume ./data/postgres is used to persist the database data between docker container restarts.
 ```
 services:
   db:
