@@ -84,7 +84,7 @@ class ThymeleafPlaywrightIT {
 
       page.waitForSelector("text=When");
       int actionRows = page.locator("table:has-text(\"When\") tbody tr").count();
-      log.info("Action rows: {}", actionRows);
+      log.info("Number of Action rows: {}", actionRows);
 
       // On patient page assert action table headings
       assertTrue(page.locator("text=When").count() > 0, "When header missing");
@@ -94,10 +94,8 @@ class ThymeleafPlaywrightIT {
 
       // subtract one for the When, Activity, Context, and Module headers.
       assertEquals(37, --actionRows, "37 Action rows found");
-      log.info("Action rows: {}", actionRows); // optional assertion assertTrue(actionRows >= 0, "Found action rows");
 
-
-
+      // close browser
       browser.close();
     }
   }
