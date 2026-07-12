@@ -100,7 +100,7 @@ Create unit tests for service layer
 
 Create integration tests for WebController endpoints
 + Using Playwright framework to test the index.html -> patients.html -> patient.html flow:
-+ + Go to http://localhost:8000" - check for View patients link - click the link
++ + Go to http://localhost:8080" - check for View patients link - click the link
 + + Go to patients.html - Assert patients header and search label text - Click the first patient link in the table
 + + Go to patient.html - On patient page assert action table headings - When, Activity, Context, and Module.
 
