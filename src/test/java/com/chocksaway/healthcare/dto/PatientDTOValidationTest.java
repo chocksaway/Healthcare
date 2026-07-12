@@ -1,9 +1,8 @@
 package com.chocksaway.healthcare.dto;
 
+import com.chocksaway.healthcare.testutils.ValidationTestFixture;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
@@ -14,19 +13,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PatientDTOValidationTest {
     private static Validator validator;
-    private static ValidatorFactory validatorFactory;
 
     @BeforeAll
     public static void setUp() {
-        validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.getValidator();
+        validator = ValidationTestFixture.createValidator();
     }
 
     @AfterAll
     public static void tearDown() {
-        if (validatorFactory != null) {
-            validatorFactory.close();
-        }
+        // nothing to close
     }
 
     @Test
@@ -76,7 +71,7 @@ public class PatientDTOValidationTest {
 
         Set<ConstraintViolation<ActionDTO>> violations = validator.validate(a);
         assertThat(violations).isNotEmpty();
-        // property path should include patient.givenName
+        // patient.givenName should not be blank
         assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().contains("patient") && v.getPropertyPath().toString().contains("givenName"));
     }
 }

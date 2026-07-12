@@ -10,9 +10,15 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 class WebControllerTest {
     private MockMvc mockMvc;
@@ -41,7 +47,9 @@ class WebControllerTest {
         when(patientService.search("Bob")).thenReturn(List.of(dto));
 
         mockMvc.perform(get("/api/patients/search").param("q", "Bob"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].givenName").value("Bob"));
 
         verify(patientService, times(1)).search("Bob");
     }

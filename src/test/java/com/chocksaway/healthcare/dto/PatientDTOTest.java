@@ -1,13 +1,14 @@
 package com.chocksaway.healthcare.dto;
 
-import com.chocksaway.healthcare.domain.Patient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import com.chocksaway.healthcare.testutils.ValidationTestFixture;
+import com.chocksaway.healthcare.testutils.ModelMapperTestFixture;
+import com.chocksaway.healthcare.domain.Patient;
 import java.util.Set;
 
 import java.time.Instant;
@@ -19,7 +20,7 @@ public class PatientDTOTest {
 
     @BeforeEach
     void setup() {
-        mapper = new ModelMapper();
+        mapper = ModelMapperTestFixture.createConfiguredMapper();
         mapper.getConfiguration().setPreferNestedProperties(false);
     }
 
@@ -51,13 +52,11 @@ public class PatientDTOTest {
         assertEquals(patient.getGender(), patientDTO.getGender());
     }
 
-    // --- Bean Validation tests ---
-
     private static Validator validator;
 
     @BeforeAll
     public static void setUpValidator() {
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
+        validator = ValidationTestFixture.createValidator();
     }
 
     @Test

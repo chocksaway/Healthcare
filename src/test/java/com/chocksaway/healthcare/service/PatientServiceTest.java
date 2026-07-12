@@ -2,6 +2,8 @@ package com.chocksaway.healthcare.service;
 
 import com.chocksaway.healthcare.domain.Action;
 import com.chocksaway.healthcare.domain.Patient;
+import com.chocksaway.healthcare.testutils.PatientTestBuilder;
+import com.chocksaway.healthcare.testutils.ActionTestBuilder;
 import com.chocksaway.healthcare.dto.ActionDTO;
 import com.chocksaway.healthcare.dto.PatientDTO;
 import com.chocksaway.healthcare.repository.ActionRepository;
@@ -39,15 +41,8 @@ class PatientServiceTest {
 
     @Test
     void listAll_mapsEntitiesToDTOs() {
-        Patient p = new Patient();
-        p.setId(123L);
-        p.setGivenName("John");
-        p.setFamilyName("Doe");
-
-        PatientDTO dto = new PatientDTO();
-        dto.setId(123L);
-        dto.setGivenName("John");
-        dto.setFamilyName("Doe");
+        Patient p = PatientTestBuilder.aPatient().withId(123L).withGivenName("John").withFamilyName("Doe").build();
+        PatientDTO dto = PatientTestBuilder.aPatient().withId(123L).withGivenName("John").withFamilyName("Doe").buildDTO();
 
         when(patientRepository.findAll()).thenReturn(List.of(p));
         when(mapper.map(p, PatientDTO.class)).thenReturn(dto);
@@ -62,9 +57,8 @@ class PatientServiceTest {
 
     @Test
     void listPage_returnsPagedDTOs() {
-        Patient p = new Patient();
-        p.setId(1L);
-        PatientDTO dto = new PatientDTO(); dto.setId(1L);
+        Patient p = PatientTestBuilder.aPatient().withId(1L).build();
+        PatientDTO dto = PatientTestBuilder.aPatient().withId(1L).buildDTO();
 
         when(patientRepository.findAll(ArgumentMatchers.any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(p), PageRequest.of(0,10), 1));
         when(mapper.map(p, PatientDTO.class)).thenReturn(dto);
@@ -95,10 +89,8 @@ class PatientServiceTest {
 
     @Test
     void getActionsForPatient_mapsActions() {
-        Action a = new Action();
-        a.setId(11L);
-        a.setActivity("act");
-        ActionDTO dto = new ActionDTO(); dto.setId(11L); dto.setActivity("act");
+        Action a = ActionTestBuilder.anAction().withId(11L).withActivity("act").build();
+        ActionDTO dto = ActionTestBuilder.anAction().withId(11L).withActivity("act").buildDTO();
 
         when(actionRepository.findByPatientIdOrderByWhenRecordedDesc(5L)).thenReturn(List.of(a));
         when(mapper.map(a, ActionDTO.class)).thenReturn(dto);
@@ -122,8 +114,8 @@ class PatientServiceTest {
 
     @Test
     void search_nullOrEmpty_returnsAll() {
-        Patient p = new Patient(); p.setId(1L);
-        PatientDTO dto = new PatientDTO(); dto.setId(1L);
+        Patient p = PatientTestBuilder.aPatient().withId(1L).build();
+        PatientDTO dto = PatientTestBuilder.aPatient().withId(1L).buildDTO();
         when(patientRepository.findAll()).thenReturn(List.of(p));
         when(mapper.map(p, PatientDTO.class)).thenReturn(dto);
 
@@ -136,8 +128,8 @@ class PatientServiceTest {
 
     @Test
     void search_nonEmpty_usesRepositorySearch() {
-        Patient p = new Patient(); p.setId(2L);
-        PatientDTO dto = new PatientDTO(); dto.setId(2L);
+        Patient p = PatientTestBuilder.aPatient().withId(2L).build();
+        PatientDTO dto = PatientTestBuilder.aPatient().withId(2L).buildDTO();
         when(patientRepository.searchByQuery(anyString())).thenReturn(List.of(p));
         when(mapper.map(p, PatientDTO.class)).thenReturn(dto);
 

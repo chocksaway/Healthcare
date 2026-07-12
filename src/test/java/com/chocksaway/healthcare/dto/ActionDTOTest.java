@@ -2,6 +2,7 @@ package com.chocksaway.healthcare.dto;
 
 import com.chocksaway.healthcare.domain.Action;
 import com.chocksaway.healthcare.domain.Patient;
+import com.chocksaway.healthcare.testutils.ModelMapperTestFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -9,14 +10,16 @@ import org.modelmapper.ModelMapper;
 import java.time.Instant;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ActionDTOTest {
     private ModelMapper mapper;
 
     @BeforeEach
     void setup() {
-        mapper = new ModelMapper();
+        mapper = ModelMapperTestFixture.createConfiguredMapper();
         mapper.getConfiguration().setPreferNestedProperties(false);
     }
 

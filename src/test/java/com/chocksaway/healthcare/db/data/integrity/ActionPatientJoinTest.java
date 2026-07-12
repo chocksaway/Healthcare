@@ -36,11 +36,12 @@ public class ActionPatientJoinTest {
                 .getSingleResult();
 
         // create patient
+        Instant base = Instant.parse("2024-01-01T00:00:00Z");
         Patient p = new Patient();
-        p.setEntityCreated(Instant.now());
-        p.setEntityUpdated(Instant.now());
+        p.setEntityCreated(base);
+        p.setEntityUpdated(base);
         p.setEntityVersion(0L);
-        p.setWhenInvited(Instant.now());
+        p.setWhenInvited(base);
         p.setGivenName("John");
         p.setFamilyName("Doe");
         p.setExternalId(UUID.randomUUID());
@@ -48,10 +49,10 @@ public class ActionPatientJoinTest {
 
         // create two actions referencing the patient
         Action a1 = new Action();
-        a1.setEntityCreated(Instant.now());
-        a1.setEntityUpdated(Instant.now());
+        a1.setEntityCreated(base);
+        a1.setEntityUpdated(base);
         a1.setEntityVersion(0L);
-        a1.setWhenRecorded(Instant.now().minusSeconds(60));
+        a1.setWhenRecorded(base.minusSeconds(60));
         a1.setExternalId(UUID.randomUUID());
         a1.setActivity("TASK-COMPLETED");
         a1.setContext("FATIGUE");
@@ -60,10 +61,10 @@ public class ActionPatientJoinTest {
         em.persist(a1);
 
         Action a2 = new Action();
-        a2.setEntityCreated(Instant.now());
-        a2.setEntityUpdated(Instant.now());
+        a2.setEntityCreated(base);
+        a2.setEntityUpdated(base);
         a2.setEntityVersion(0L);
-        a2.setWhenRecorded(Instant.now());
+        a2.setWhenRecorded(base);
         a2.setExternalId(UUID.randomUUID());
         a2.setActivity("STARTED");
         a2.setContext("FATIGUE");
@@ -75,20 +76,18 @@ public class ActionPatientJoinTest {
         em.clear();
 
         // JPQL join equivalent of the requested SQL
-        List<Action> results = em
+        List<Action> actions = em  // actions
                 .createQuery("SELECT a FROM Action a JOIN a.patient p WHERE p.id = :pid ORDER BY a.whenRecorded DESC", Action.class)
                 .setParameter("pid", p.getId())
                 .getResultList();
 
-        // verify join returned both actions in expected order (a2 then a1)
-        // expect a2 (more recent) first, then a1
-        Assertions.assertThat(results.get(0).getId()).isEqualTo(a2.getId());
-        Assertions.assertThat(results.get(1).getId()).isEqualTo(a1.getId());
+        Assertions.assertThat(actions.get(0).getId()).isEqualTo(a2.getId());
+        Assertions.assertThat(actions.get(1).getId()).isEqualTo(a1.getId());
 
-        // also verify the patient relationship is set on the returned actions
-        Assertions.assertThat(results.get(0).getPatient()).isNotNull();
-        Assertions.assertThat(results.get(0).getPatient().getId()).isEqualTo(p.getId());
+        // verify the patient is associated with the action.
+        Assertions.assertThat(actions.get(0).getPatient()).isNotNull();
+        Assertions.assertThat(actions.get(0).getPatient().getId()).isEqualTo(p.getId());
 
-        assertFalse(results.isEmpty());
+        assertFalse(actions.isEmpty());
     }
 }

@@ -7,6 +7,7 @@ import com.chocksaway.healthcare.dto.ActionDTO;
 import com.chocksaway.healthcare.dto.PatientDTO;
 import com.chocksaway.healthcare.repository.ActionRepository;
 import com.chocksaway.healthcare.repository.PatientRepository;
+import com.chocksaway.healthcare.testutils.PatientTestBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,22 +53,29 @@ class PatientServiceSpringTest {
     }
 
     @Test
-    void listAll_and_listPage_and_getPatient_endToEndMapping() {
-        Patient p = new Patient();
-        p.setId(42L);
-        p.setGivenName("Alice");
-        p.setFamilyName("Smith");
+    void listAll_shouldReturnMappedDTOs() {
+        Patient p = PatientTestBuilder.aPatient().withId(42L).withGivenName("Alice").withFamilyName("Smith").build();
 
         when(patientRepository.findAll()).thenReturn(List.of(p));
-        when(patientRepository.findAll(any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(p), PageRequest.of(0,10), 1));
-        when(patientRepository.findById(42L)).thenReturn(Optional.of(p));
 
         List<PatientDTO> all = patientService.listAll();
         assertThat(all).hasSize(1);
         assertThat(all.getFirst().getId()).isEqualTo(42L);
+    }
+
+    @Test
+    void listPage_shouldReturnPagedDTOs() {
+        Patient p = PatientTestBuilder.aPatient().withId(42L).withGivenName("Alice").withFamilyName("Smith").build();
+        when(patientRepository.findAll(any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(p), PageRequest.of(0,10), 1));
 
         var page = patientService.listPage(0,10);
         assertThat(page.getTotalElements()).isEqualTo(1);
+    }
+
+    @Test
+    void getPatient_shouldReturnMappedPatient() {
+        Patient p = PatientTestBuilder.aPatient().withId(42L).withGivenName("Alice").withFamilyName("Smith").build();
+        when(patientRepository.findById(42L)).thenReturn(Optional.of(p));
 
         Optional<PatientDTO> dtoOpt = patientService.getPatient(42L);
         assertThat(dtoOpt).isPresent();
