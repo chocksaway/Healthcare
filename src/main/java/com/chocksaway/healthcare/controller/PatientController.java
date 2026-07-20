@@ -34,18 +34,18 @@ public class PatientController {
     }
 
     @GetMapping("/patients")
-    public String patients(Model model, @RequestParam(name = "page", defaultValue = "1") int page){
+    public String listPatientsPaged(Model model, @RequestParam(name = "page", defaultValue = "1") int page){
         // incoming `page` is 1-based for the UI; convert to 0-based for paging
         int pageIndex = (page <= 0) ? 0 : page - 1;
-        Page<PatientDTO> p = patientService.listPage(pageIndex, 10);
-        model.addAttribute("patientsPage", p);
+        Page<PatientDTO> patientsPage = patientService.listPage(pageIndex, 10);
+        model.addAttribute("patientsPage", patientsPage);
         // keep patients attribute for compatibility (content list)
-        model.addAttribute("patients", p.getContent());
-        return "patients";
+        model.addAttribute("patients", patientsPage.getContent());
+        return "searchAndViewPatientsPaged";
     }
 
-    @GetMapping("/patients/{id}")
-    public String patient(@PathVariable Long id, Model model){
+    @GetMapping("/patient/{id}")
+    public String getPatient(@PathVariable Long id, Model model){
         Optional<PatientDTO> pOpt = patientService.getPatient(id);
         if (pOpt.isEmpty()) return "redirect:/patients";
         PatientDTO p = pOpt.get();

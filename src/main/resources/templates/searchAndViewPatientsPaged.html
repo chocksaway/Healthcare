@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Patients</title>
@@ -38,7 +38,7 @@
     <tbody id="patients-body">
     <tr th:each="p : ${patientsPage.content}" th:classappend="${p.gender == null or #strings.isEmpty(p.gender)} ? ' no-gender' : ''">
       <td th:text="${p.id}"></td>
-      <td><a th:href="@{/patients/{id}(id=${p.id})}" th:text="${p.givenName + ' ' + p.familyName}"></a></td>
+      <td><a th:href="@{/patient/{id}(id=${p.id})}" th:text="${p.givenName + ' ' + p.familyName}"></a></td>
       <td th:text="${p.gender}"></td>
     </tr>
     </tbody>
@@ -89,7 +89,7 @@
             } else {
               data.forEach(p => {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${p.id}</td><td><a href="/patients/${p.id}">${(p.givenName||'') + ' ' + (p.familyName||'')}</a></td><td>${p.gender||''}</td>`;
+                tr.innerHTML = `<td>${p.id}</td><td><a href="/patient/${p.id}">${(p.givenName||'') + ' ' + (p.familyName||'')}</a></td><td>${p.gender||''}</td>`;
                 // mark rows with missing/empty gender
                 if (!p.gender || String(p.gender).trim() === '') {
                   tr.classList.add('no-gender');
