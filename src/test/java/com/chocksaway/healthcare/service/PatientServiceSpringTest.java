@@ -103,9 +103,9 @@ class PatientServiceSpringTest {
         when(patientRepository.countByWhenRegisteredIsNotNull()).thenReturn(2L);
         when(patientRepository.countByWhenDischargedIsNotNull()).thenReturn(1L);
 
-        assertThat(patientService.countInvited()).isEqualTo(3L);
-        assertThat(patientService.countRegistered()).isEqualTo(2L);
-        assertThat(patientService.countDischarged()).isEqualTo(1L);
+        assertThat(patientService.countInvitedPatients()).isEqualTo(3L);
+        assertThat(patientService.countRegisteredPatients()).isEqualTo(2L);
+        assertThat(patientService.countDischargedPatients()).isEqualTo(1L);
     }
 
 }

@@ -20,14 +20,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-class WebControllerTest {
+class PatientControllerTest {
     private MockMvc mockMvc;
     private PatientService patientService;
 
     @BeforeEach
     void setUp() {
         patientService = mock(PatientService.class);
-        WebController controller = new WebController(patientService);
+        PatientController controller = new PatientController(patientService);
 
         LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
         validator.afterPropertiesSet();

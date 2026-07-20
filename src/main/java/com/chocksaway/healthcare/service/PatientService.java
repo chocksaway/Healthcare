@@ -107,7 +107,7 @@ public class PatientService {
         }
     }
 
-    public long countInvited(){
+    public long countInvitedPatients(){
         try {
             return patientRepository.countByWhenInvitedIsNotNull();
         } catch (Exception ex) {
@@ -116,7 +116,7 @@ public class PatientService {
         }
     }
 
-    public long countRegistered(){
+    public long countRegisteredPatients(){
         try {
             return patientRepository.countByWhenRegisteredIsNotNull();
         } catch (Exception ex) {
@@ -125,7 +125,7 @@ public class PatientService {
         }
     }
 
-    public long countDischarged(){
+    public long countDischargedPatients(){
         try {
             return patientRepository.countByWhenDischargedIsNotNull();
         } catch (Exception ex) {

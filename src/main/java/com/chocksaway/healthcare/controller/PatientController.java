@@ -18,18 +18,18 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Controller
-public class WebController {
+public class PatientController {
     private final PatientService patientService;
-    public WebController(PatientService patientService){ this.patientService = patientService; }
+    public PatientController(PatientService patientService){ this.patientService = patientService; }
 
     @GetMapping("/")
-    public String index(Model model){
-        long invited = patientService.countInvited();
-        long registered = patientService.countRegistered();
-        long discharged = patientService.countDischarged();
-        model.addAttribute("invited", invited);
-        model.addAttribute("registered", registered);
-        model.addAttribute("discharged", discharged);
+    public String listInvitedRegisteredDischargedPatients(Model model){
+        long invitedPatients = patientService.countInvitedPatients();
+        long registeredPatients = patientService.countRegisteredPatients();
+        long dischargedPatients = patientService.countDischargedPatients();
+        model.addAttribute("invitedPatients", invitedPatients);
+        model.addAttribute("registeredPatients", registeredPatients);
+        model.addAttribute("dischargedPatients", dischargedPatients);
         return "index";
     }
 

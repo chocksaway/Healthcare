@@ -107,9 +107,9 @@ class PatientServiceTest {
         when(patientRepository.countByWhenRegisteredIsNotNull()).thenReturn(5L);
         when(patientRepository.countByWhenDischargedIsNotNull()).thenReturn(2L);
 
-        assertEquals(7L, service.countInvited());
-        assertEquals(5L, service.countRegistered());
-        assertEquals(2L, service.countDischarged());
+        assertEquals(7L, service.countInvitedPatients());
+        assertEquals(5L, service.countRegisteredPatients());
+        assertEquals(2L, service.countDischargedPatients());
     }
 
     @Test

@@ -83,19 +83,19 @@ class PatientServiceExceptionTest {
     void countMethods_throwServiceExceptionOnRepoError() {
         RuntimeException cause1 = new RuntimeException("Error in countInvited");
         when(patientRepository.countByWhenInvitedIsNotNull()).thenThrow(cause1);
-        ServiceException ex1 = assertThrows(ServiceException.class, () -> service.countInvited());
+        ServiceException ex1 = assertThrows(ServiceException.class, () -> service.countInvitedPatients());
         assertNotNull(ex1.getCause());
         assertEquals(cause1, ex1.getCause());
 
         RuntimeException cause2 = new RuntimeException("Error in countRegistered");
         when(patientRepository.countByWhenRegisteredIsNotNull()).thenThrow(cause2);
-        ServiceException ex2 = assertThrows(ServiceException.class, () -> service.countRegistered());
+        ServiceException ex2 = assertThrows(ServiceException.class, () -> service.countRegisteredPatients());
         assertNotNull(ex2.getCause());
         assertEquals(cause2, ex2.getCause());
 
         RuntimeException cause3 = new RuntimeException("Error in countDischarged");
         when(patientRepository.countByWhenDischargedIsNotNull()).thenThrow(cause3);
-        ServiceException ex3 = assertThrows(ServiceException.class, () -> service.countDischarged());
+        ServiceException ex3 = assertThrows(ServiceException.class, () -> service.countDischargedPatients());
         assertNotNull(ex3.getCause());
         assertEquals(cause3, ex3.getCause());
     }
