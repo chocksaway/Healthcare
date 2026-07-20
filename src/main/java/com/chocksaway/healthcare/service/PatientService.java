@@ -109,7 +109,7 @@ public class PatientService {
 
     public long countInvited(){
         try {
-            return patientRepository.countInvited();
+            return patientRepository.countByWhenInvitedIsNotNull();
         } catch (Exception ex) {
             log.error("Failed to count invited patients", ex);
             throw new ServiceException("Failed to count invited patients", ex);
@@ -118,7 +118,7 @@ public class PatientService {
 
     public long countRegistered(){
         try {
-            return patientRepository.countRegistered();
+            return patientRepository.countByWhenRegisteredIsNotNull();
         } catch (Exception ex) {
             log.error("Failed to count registered patients", ex);
             throw new ServiceException("Failed to count registered patients", ex);
@@ -127,7 +127,7 @@ public class PatientService {
 
     public long countDischarged(){
         try {
-            return patientRepository.countDischarged();
+            return patientRepository.countByWhenDischargedIsNotNull();
         } catch (Exception ex) {
             log.error("Failed to count discharged patients", ex);
             throw new ServiceException("Failed to count discharged patients", ex);

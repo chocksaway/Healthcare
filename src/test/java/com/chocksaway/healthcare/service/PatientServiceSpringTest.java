@@ -99,9 +99,9 @@ class PatientServiceSpringTest {
 
     @Test
     void counts_delegate() {
-        when(patientRepository.countInvited()).thenReturn(3L);
-        when(patientRepository.countRegistered()).thenReturn(2L);
-        when(patientRepository.countDischarged()).thenReturn(1L);
+        when(patientRepository.countByWhenInvitedIsNotNull()).thenReturn(3L);
+        when(patientRepository.countByWhenRegisteredIsNotNull()).thenReturn(2L);
+        when(patientRepository.countByWhenDischargedIsNotNull()).thenReturn(1L);
 
         assertThat(patientService.countInvited()).isEqualTo(3L);
         assertThat(patientService.countRegistered()).isEqualTo(2L);

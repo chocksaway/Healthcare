@@ -103,9 +103,9 @@ class PatientServiceTest {
 
     @Test
     void counts_areDelegatedToRepository() {
-        when(patientRepository.countInvited()).thenReturn(7L);
-        when(patientRepository.countRegistered()).thenReturn(5L);
-        when(patientRepository.countDischarged()).thenReturn(2L);
+        when(patientRepository.countByWhenInvitedIsNotNull()).thenReturn(7L);
+        when(patientRepository.countByWhenRegisteredIsNotNull()).thenReturn(5L);
+        when(patientRepository.countByWhenDischargedIsNotNull()).thenReturn(2L);
 
         assertEquals(7L, service.countInvited());
         assertEquals(5L, service.countRegistered());
