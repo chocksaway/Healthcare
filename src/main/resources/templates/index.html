@@ -10,18 +10,18 @@
   <h1>Patient breakdown</h1>
   <canvas id="breakdown" width="400" height="200"></canvas>
   <script th:inline="javascript">
-    const invited = [[${invited}]];
-    const registered = [[${registered}]];
-    const discharged = [[${discharged}]];
+    const invitedPatients = [[${invitedPatients}]];
+    const registeredPatients = [[${registeredPatients}]];
+    const dischargedPatients = [[${dischargedPatients}]];
     const ctx = document.getElementById('breakdown').getContext('2d');
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Invited','Registered','Discharged'],
+        labels: ['Invited Patients','Registered Patients','Discharged Patients'],
         datasets: [{
           label: 'Patients',
           backgroundColor: ['#36a2eb','#4bc0c0','#ff6384'],
-          data: [invited, registered, discharged]
+          data: [invitedPatients, registeredPatients, dischargedPatients]
         }]
       }
     });
